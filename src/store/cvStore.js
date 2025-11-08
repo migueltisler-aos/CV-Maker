@@ -33,10 +33,14 @@ const useCVStore = create((set, get) => ({
   initializeStore: () => {
     const masterCV = loadMasterCV();
     const generatedCVs = loadGeneratedCVs();
+
+    // Default to dashboard if there are existing CVs, otherwise start workflow
+    const defaultStep = generatedCVs.length > 0 ? 'dashboard' : (masterCV ? 'job-input' : 'master-cv');
+
     set({
       masterCV,
       generatedCVs,
-      currentStep: masterCV ? 'job-input' : 'master-cv'
+      currentStep: defaultStep
     });
   },
 
@@ -98,6 +102,9 @@ const useCVStore = create((set, get) => ({
       createdAt: currentCV.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       jobRequirements,
+      status: currentCV.status || 'entwurf', // entwurf, versendet, in_gespraech, absage, zusage
+      appliedDate: currentCV.appliedDate || null,
+      notes: currentCV.notes || '',
     };
 
     saveGeneratedCV(cv);
@@ -165,6 +172,48 @@ const useCVStore = create((set, get) => ({
         coverLetterStyle: style
       }
     }));
+  },
+
+  // Application Tracking Actions
+  updateApplicationStatus: (cvId, status, appliedDate = null) => {
+    const cvs = loadGeneratedCVs();
+    const updated = cvs.map(cv =>
+      cv.id === cvId
+        ? { ...cv, status, appliedDate: appliedDate || cv.appliedDate, updatedAt: new Date().toISOString() }
+        : cv
+    );
+    localStorage.setItem('cv_maker_generated_cvs', JSON.stringify(updated));
+    set({ generatedCVs: updated });
+
+    // Update current CV if it's the one being updated
+    const current = get().currentCV;
+    if (current.id === cvId) {
+      set({
+        currentCV: {
+          ...current,
+          status,
+          appliedDate: appliedDate || current.appliedDate
+        }
+      });
+    }
+  },
+
+  updateApplicationNotes: (cvId, notes) => {
+    const cvs = loadGeneratedCVs();
+    const updated = cvs.map(cv =>
+      cv.id === cvId
+        ? { ...cv, notes, updatedAt: new Date().toISOString() }
+        : cv
+    );
+    localStorage.setItem('cv_maker_generated_cvs', JSON.stringify(updated));
+    set({ generatedCVs: updated });
+  },
+
+  deleteApplication: (cvId) => {
+    const cvs = loadGeneratedCVs();
+    const filtered = cvs.filter(cv => cv.id !== cvId);
+    localStorage.setItem('cv_maker_generated_cvs', JSON.stringify(filtered));
+    set({ generatedCVs: filtered });
   },
 }));
 

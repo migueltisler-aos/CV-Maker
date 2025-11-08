@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import useCVStore from './store/cvStore';
 import Header from './components/Layout/Header';
+import ApplicationDashboard from './components/Dashboard/ApplicationDashboard';
 import MasterCVManager from './components/MasterCV/MasterCVManager';
 import JobInput from './components/JobAnalysis/JobInput';
 import ProjectMatcher from './components/JobAnalysis/ProjectMatcher';
@@ -16,6 +17,8 @@ function App() {
 
   const renderStep = () => {
     switch (currentStep) {
+      case 'dashboard':
+        return <ApplicationDashboard />;
       case 'master-cv':
         return <MasterCVManager />;
       case 'job-input':
@@ -27,7 +30,7 @@ function App() {
       case 'preview':
         return <CVPreview />;
       default:
-        return <MasterCVManager />;
+        return <ApplicationDashboard />;
     }
   };
 
