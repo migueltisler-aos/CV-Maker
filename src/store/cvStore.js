@@ -17,6 +17,8 @@ const useCVStore = create((set, get) => ({
     selectedProjects: [],
     selectedSkills: [],
     customizations: {},
+    coverLetter: null,
+    coverLetterStyle: 'authentisch',
   },
 
   // Generated CVs
@@ -124,6 +126,8 @@ const useCVStore = create((set, get) => ({
         selectedProjects: [],
         selectedSkills: [],
         customizations: {},
+        coverLetter: null,
+        coverLetterStyle: 'authentisch',
       },
       currentJob: null,
       jobRequirements: null,
@@ -142,6 +146,25 @@ const useCVStore = create((set, get) => ({
 
   setError: (error) => {
     set({ error });
+  },
+
+  // Cover Letter Actions
+  setCoverLetter: (coverLetter) => {
+    set(state => ({
+      currentCV: {
+        ...state.currentCV,
+        coverLetter
+      }
+    }));
+  },
+
+  setCoverLetterStyle: (style) => {
+    set(state => ({
+      currentCV: {
+        ...state.currentCV,
+        coverLetterStyle: style
+      }
+    }));
   },
 }));
 

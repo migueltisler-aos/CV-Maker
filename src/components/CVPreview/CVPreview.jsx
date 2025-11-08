@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import useCVStore from '../../store/cvStore';
 import SkillRadar from './SkillRadar';
+import CoverLetterGenerator from './CoverLetterGenerator';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -93,6 +94,9 @@ const CVPreview = () => {
           </div>
         </div>
       </div>
+
+      {/* Cover Letter Generator */}
+      <CoverLetterGenerator />
 
       {/* CV Document */}
       <div className="bg-white shadow-lg" ref={cvRef}>
