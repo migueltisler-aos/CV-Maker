@@ -236,7 +236,8 @@ const CVPreview = () => {
                     const elements = [];
                     let currentRequirement = null;
                     let currentFirma = null;
-                    let isStationenSection = false;
+                    let stationLines = [];
+                    let collectingStations = false;
 
                     lines.forEach((line, idx) => {
                       // Skip "ANFORDERUNGS-MATCHING" header
@@ -244,43 +245,47 @@ const CVPreview = () => {
                         return;
                       }
 
-                      // BISHERIGE STATIONEN Section
+                      // BISHERIGE STATIONEN Section start
                       if (line.trim() === '**BISHERIGE STATIONEN**') {
-                        isStationenSection = true;
+                        collectingStations = true;
+                        return;
+                      }
+
+                      // Collect station bullets
+                      if (collectingStations && line.startsWith('•')) {
+                        stationLines.push(line.substring(1).trim());
+                        return;
+                      }
+
+                      // End of stations section - render all collected stations
+                      if (collectingStations && line.trim() === '---') {
                         elements.push(
-                          <div key={idx} className="mt-12 mb-6">
+                          <div key="stations" className="mt-12 mb-6">
                             <h3 className="text-xl font-bold text-slate-800 mb-6 pb-2 border-b-2 border-slate-300">
                               Bisherige Stationen
                             </h3>
                             <div className="relative pl-8 border-l-2 border-blue-400">
+                              {stationLines.map((text, sIdx) => (
+                                <div key={sIdx} className="relative mb-4 pl-6">
+                                  <div className="absolute left-[-2.5rem] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white"></div>
+                                  <span className="text-gray-700 text-sm font-medium">{text}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         );
+                        collectingStations = false;
+                        stationLines = [];
                         return;
                       }
 
-                      // Station bullets (Timeline)
-                      if (isStationenSection && line.startsWith('•')) {
-                        const text = line.substring(1).trim();
-                        elements.push(
-                          <div key={idx} className="relative mb-4 pl-6">
-                            <div className="absolute left-[-2.5rem] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white"></div>
-                            <span className="text-gray-700 text-sm font-medium">{text}</span>
-                          </div>
-                        );
-                        return;
-                      }
-
-                      // End of stations section
-                      if (isStationenSection && line.trim() === '---') {
-                        elements.push(
-                          </div>
-                          </div>
-                        );
-                        isStationenSection = false;
+                      // Skip processing while collecting stations
+                      if (collectingStations) {
                         return;
                       }
 
                       // Requirement heading
-                      if (line.startsWith('**') && line.endsWith('**') && !isStationenSection) {
+                      if (line.startsWith('**') && line.endsWith('**')) {
                         const text = line.replace(/\*\*/g, '');
                         currentRequirement = text;
                         currentFirma = null;
