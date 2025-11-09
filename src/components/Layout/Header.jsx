@@ -1,7 +1,7 @@
 import useCVStore from '../../store/cvStore';
 
 const Header = () => {
-  const { currentStep, setCurrentStep, masterCV, resetCurrentCV, generatedCVs } = useCVStore();
+  const { currentStep, setCurrentStep, masterCV, resetCurrentCV, generatedCVs, manualMode, toggleManualMode } = useCVStore();
 
   const steps = [
     { id: 'master-cv', label: 'Master CV', enabled: true },
@@ -26,6 +26,19 @@ const Header = () => {
             <p className="text-sm text-gray-600">Professionelle Bewerbungsunterlagen erstellen</p>
           </div>
           <div className="flex items-center space-x-3">
+            {/* Manual Mode Toggle */}
+            <button
+              onClick={toggleManualMode}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
+                manualMode
+                  ? 'bg-yellow-100 text-yellow-800 border border-yellow-300'
+                  : 'bg-green-100 text-green-800 border border-green-300'
+              }`}
+              title={manualMode ? 'Copy/Paste Modus aktiv' : 'API Modus aktiv'}
+            >
+              {manualMode ? '📋 Manual Mode' : '🤖 API Mode'}
+            </button>
+
             {/* Dashboard Button */}
             <button
               onClick={() => setCurrentStep('dashboard')}

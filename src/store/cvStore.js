@@ -28,6 +28,7 @@ const useCVStore = create((set, get) => ({
   isLoading: false,
   error: null,
   currentStep: 'master-cv', // 'master-cv', 'job-input', 'project-selection', 'skill-selection', 'preview'
+  manualMode: true, // true = copy/paste prompts, false = API calls
 
   // Actions
   initializeStore: () => {
@@ -214,6 +215,11 @@ const useCVStore = create((set, get) => ({
     const filtered = cvs.filter(cv => cv.id !== cvId);
     localStorage.setItem('cv_maker_generated_cvs', JSON.stringify(filtered));
     set({ generatedCVs: filtered });
+  },
+
+  // Manual Mode Toggle
+  toggleManualMode: () => {
+    set(state => ({ manualMode: !state.manualMode }));
   },
 }));
 
