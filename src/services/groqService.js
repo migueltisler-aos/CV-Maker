@@ -257,57 +257,60 @@ Nutze stattdessen:
 
 Jeder Satz muss zählen. Keine Füllwörter.`,
 
-    strukturiert: `Schreibe eine strukturierte, punktuelle Darstellung:
-1. Kurze Einleitung (1-2 Sätze): Interesse an der Position
-2. Anforderungs-Matching (Hauptteil):
-   - Für jede Must-Have-Anforderung: Eine Zeile mit konkretem Projekt-Beispiel
-   - Format: "• [Anforderung] → [Projektname] bei [Firma]: [konkreter Erfolg/Erfahrung]"
-3. Beruflicher Werdegang (Aufzählung):
-   - "Bisherige Stationen:"
-   - Liste der Firmen mit Rolle und Zeitraum
-   - Format: "• [Rolle] bei [Firma] ([Zeitraum])"
-4. Kurzer Abschluss (1 Satz): Verfügbarkeit/nächste Schritte
+    strukturiert: `KEIN Fließtext! Nur zwei Listen - sonst nichts.
 
-Vermeide Fließtext - nutze Bullet Points und klare Struktur.`
+FORMAT:
+
+**ANFORDERUNGEN & NACHWEISE:**
+Für jede Must-Have-Anforderung EINE Zeile:
+• [Anforderung] → [Konkreter Nachweis aus Projekterfahrung]
+
+Beispiel:
+• KPI-Dashboards → Entwicklung Echtzeit-Dashboard bei Pegel Pumpenanlagen GmbH
+• Teamführung → Recruiting & Personalaufbau +25% bei Bilstein GmbH
+
+**BISHERIGE STATIONEN:**
+Für jede Position EINE Zeile:
+• [Zeitraum] bei [Firma] als [Rolle]
+
+Beispiel:
+• 10/2024 – 09/2025 bei Pegel Pumpenanlagen GmbH als Geschäftsleiter
+• 10/2022 – 09/2024 bei Bilstein GmbH als Interim-Geschäftsführer
+
+REGELN:
+- KEINE Einleitung, KEIN Abschluss, KEINE Grußformeln
+- KEINE weiteren Erklärungen
+- NUR diese zwei Listen mit Bullet Points
+- Nutze EXAKTE Projekterfahrungen aus den Daten
+- Sei präzise und konkret`
   };
 
   let prompt;
 
   if (style === 'strukturiert') {
-    prompt = `Erstelle ein strukturiertes Anschreiben für folgende Position.
+    prompt = `${styleInstructions[style]}
 
-${styleInstructions[style]}
+POSITION:
+${requirements.titel} bei ${requirements.firma || 'dem Unternehmen'}
 
-Persönliche Daten:
-Name: ${personal.name}
-Titel: ${personal.title || 'Nicht angegeben'}
-Standort: ${personal.location || 'Nicht angegeben'}
+MUST-HAVE ANFORDERUNGEN:
+${requirements.mustHave?.join('\n') || 'Keine spezifischen Anforderungen angegeben'}
 
-Position:
-Titel: ${requirements.titel}
-Firma: ${requirements.firma || 'Nicht angegeben'}
-
-Must-Have Anforderungen:
-${requirements.mustHave?.join('\n') || 'Keine'}
-
-Verantwortlichkeiten:
+VERANTWORTLICHKEITEN:
 ${requirements.responsibilities?.join('\n') || 'Keine'}
 
-Relevante Projekte & Erfolge:
+VERFÜGBARE PROJEKTERFAHRUNGEN:
 ${selectedExperiences.map((exp, idx) => `
 ${idx + 1}. ${exp.rolle} bei ${exp.firma} (${exp.zeitraum})
-Highlights:
-${exp.achievements?.slice(0, 3).map(a => `- ${a}`).join('\n') || '- ' + exp.details}
+Achievements:
+${exp.achievements?.map(a => `- ${a}`).join('\n') || '- ' + exp.details}
 `).join('\n')}
 
-WICHTIGE FORMATIERUNG:
-- Nutze Bullet Points (•) für Listen
-- Jede Anforderung bekommt EINE Zeile mit passendem Projekt-Beispiel
-- Halte dich an die strukturierte Form, kein Fließtext
-- Sei konkret und nutze Zahlen wo möglich
+ALLE BISHERIGEN STATIONEN (für zweite Liste):
+${selectedExperiences.map(exp => `${exp.zeitraum} bei ${exp.firma} als ${exp.rolle}`).join('\n')}
 
-Schreibe NUR das Anschreiben, keine Erklärungen oder Meta-Kommentare.
-Beginne NICHT mit Absenderadresse oder Betreff - nur der Text.`;
+AUFGABE:
+Erstelle die zwei Listen wie im FORMAT beschrieben. NICHTS ANDERES.`;
   } else {
     prompt = `Schreibe ein Anschreiben für folgende Position im Stil: ${style}
 
