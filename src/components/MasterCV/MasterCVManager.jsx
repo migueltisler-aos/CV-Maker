@@ -10,6 +10,7 @@ const MasterCVManager = () => {
       email: '',
       phone: '',
       location: '',
+      address: '',
       linkedin: '',
     },
     experience: [],
@@ -258,6 +259,91 @@ JSON: "achievements": ["KPI-Dashboard", "Recruiting +25%", "Team aufgebaut"]`;
     }));
   };
 
+  const handleAddExperience = () => {
+    const newExp = {
+      id: `exp_${Date.now()}`,
+      firma: '',
+      rolle: '',
+      zeitraum: '',
+      ort: '',
+      details: '',
+      achievements: []
+    };
+    setFormData(prev => ({
+      ...prev,
+      experience: [...prev.experience, newExp]
+    }));
+  };
+
+  const handleAddSkill = () => {
+    const newSkill = {
+      name: '',
+      level: 5,
+      category: 'Technical'
+    };
+    setFormData(prev => ({
+      ...prev,
+      skills: [...prev.skills, newSkill]
+    }));
+  };
+
+  const handleAddEducation = () => {
+    const newEdu = {
+      id: `edu_${Date.now()}`,
+      degree: '',
+      institution: '',
+      year: ''
+    };
+    setFormData(prev => ({
+      ...prev,
+      education: [...prev.education, newEdu]
+    }));
+  };
+
+  const handleAddCertification = () => {
+    const newCert = {
+      id: `cert_${Date.now()}`,
+      name: '',
+      year: ''
+    };
+    setFormData(prev => ({
+      ...prev,
+      certifications: [...prev.certifications, newCert]
+    }));
+  };
+
+  const handleEditEducation = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      education: prev.education.map((edu, i) =>
+        i === index ? { ...edu, [field]: value } : edu
+      )
+    }));
+  };
+
+  const handleDeleteEducation = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      education: prev.education.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleEditCertification = (index, field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      certifications: prev.certifications.map((cert, i) =>
+        i === index ? { ...cert, [field]: value } : cert
+      )
+    }));
+  };
+
+  const handleDeleteCertification = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      certifications: prev.certifications.filter((_, i) => i !== index)
+    }));
+  };
+
   const handlePersonalInfoChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
@@ -473,6 +559,16 @@ Berufserfahrung,Pegel Pumpenanlagen GmbH,Geschäftsleiter,10/2024 – 09/2025,Be
               />
             </div>
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+              <input
+                type="text"
+                value={formData.personal.address || ''}
+                onChange={(e) => handlePersonalInfoChange('address', e.target.value)}
+                className="input-field"
+                placeholder="Musterstraße 123, 12345 Berlin"
+              />
+            </div>
+            <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn</label>
               <input
                 type="text"
@@ -516,9 +612,17 @@ Berufserfahrung,Pegel Pumpenanlagen GmbH,Geschäftsleiter,10/2024 – 09/2025,Be
           ) : (
             <>
               {/* Experience Edit Table */}
-              {formData.experience.length > 0 && (
-                <div className="mb-6">
-                  <h4 className="font-medium mb-3">Berufserfahrung</h4>
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h4 className="font-medium">Berufserfahrung ({formData.experience.length})</h4>
+                  <button
+                    onClick={handleAddExperience}
+                    className="btn-secondary text-sm"
+                  >
+                    ➕ Hinzufügen
+                  </button>
+                </div>
+                {formData.experience.length > 0 && (
                   <div className="space-y-4">
                     {formData.experience.map((exp, index) => (
                       <div key={exp.id} className="bg-white border border-gray-200 rounded-lg p-4">
@@ -571,13 +675,114 @@ Berufserfahrung,Pegel Pumpenanlagen GmbH,Geschäftsleiter,10/2024 – 09/2025,Be
                       </div>
                     ))}
                   </div>
+                )}
+              </div>
+
+              {/* Education Edit Table */}
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h4 className="font-medium">Ausbildung ({formData.education.length})</h4>
+                  <button
+                    onClick={handleAddEducation}
+                    className="btn-secondary text-sm"
+                  >
+                    ➕ Hinzufügen
+                  </button>
                 </div>
-              )}
+                {formData.education.length > 0 && (
+                  <div className="space-y-3">
+                    {formData.education.map((edu, index) => (
+                      <div key={edu.id} className="bg-white border border-gray-200 rounded-lg p-4">
+                        <div className="grid grid-cols-2 gap-3 mb-2">
+                          <input
+                            type="text"
+                            value={edu.institution}
+                            onChange={(e) => handleEditEducation(index, 'institution', e.target.value)}
+                            className="input-field text-sm"
+                            placeholder="Institution"
+                          />
+                          <input
+                            type="text"
+                            value={edu.year}
+                            onChange={(e) => handleEditEducation(index, 'year', e.target.value)}
+                            className="input-field text-sm"
+                            placeholder="Jahr"
+                          />
+                        </div>
+                        <input
+                          type="text"
+                          value={edu.degree}
+                          onChange={(e) => handleEditEducation(index, 'degree', e.target.value)}
+                          className="input-field text-sm mb-2"
+                          placeholder="Abschluss"
+                        />
+                        <button
+                          onClick={() => handleDeleteEducation(index)}
+                          className="text-red-600 text-sm hover:text-red-800"
+                        >
+                          🗑️ Löschen
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Certifications Edit Table */}
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h4 className="font-medium">Weiterbildungen ({formData.certifications.length})</h4>
+                  <button
+                    onClick={handleAddCertification}
+                    className="btn-secondary text-sm"
+                  >
+                    ➕ Hinzufügen
+                  </button>
+                </div>
+                {formData.certifications.length > 0 && (
+                  <div className="space-y-3">
+                    {formData.certifications.map((cert, index) => (
+                      <div key={cert.id} className="bg-white border border-gray-200 rounded-lg p-4">
+                        <div className="grid grid-cols-2 gap-3 mb-2">
+                          <input
+                            type="text"
+                            value={cert.name}
+                            onChange={(e) => handleEditCertification(index, 'name', e.target.value)}
+                            className="input-field text-sm"
+                            placeholder="Name der Weiterbildung"
+                          />
+                          <input
+                            type="text"
+                            value={cert.year}
+                            onChange={(e) => handleEditCertification(index, 'year', e.target.value)}
+                            className="input-field text-sm"
+                            placeholder="Jahr"
+                          />
+                        </div>
+                        <button
+                          onClick={() => handleDeleteCertification(index)}
+                          className="text-red-600 text-sm hover:text-red-800"
+                        >
+                          🗑️ Löschen
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Skills Edit Table */}
-              {formData.skills.length > 0 && (
-                <div>
-                  <h4 className="font-medium mb-3">Skills</h4>
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <h4 className="font-medium">Skills ({formData.skills.length})</h4>
+                  <button
+                    onClick={handleAddSkill}
+                    className="btn-secondary text-sm"
+                  >
+                    ➕ Hinzufügen
+                  </button>
+                </div>
+                {formData.skills.length > 0 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {formData.skills.map((skill, index) => (
                       <div key={index} className="bg-white border border-gray-200 rounded-lg p-3 flex items-center space-x-3">
@@ -616,8 +821,8 @@ Berufserfahrung,Pegel Pumpenanlagen GmbH,Geschäftsleiter,10/2024 – 09/2025,Be
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </>
           )}
         </div>
