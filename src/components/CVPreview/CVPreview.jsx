@@ -230,16 +230,57 @@ const CVPreview = () => {
                 <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-blue-600">
                   Anforderungs-Matching
                 </h2>
-                <div className="prose max-w-none">
-                  <div className="whitespace-pre-line text-gray-800 text-sm leading-relaxed">
-                    {currentCV.coverLetter}
-                  </div>
+                <div className="space-y-4">
+                  {currentCV.coverLetter.split('\n').map((line, idx) => {
+                    // Bold headings
+                    if (line.startsWith('**') && line.endsWith('**')) {
+                      const text = line.replace(/\*\*/g, '');
+                      return (
+                        <h3 key={idx} className="text-lg font-bold text-gray-900 mt-6 mb-2">
+                          {text}
+                        </h3>
+                      );
+                    }
+                    // Checkmarks
+                    if (line.startsWith('✓')) {
+                      return (
+                        <div key={idx} className="flex items-start ml-4">
+                          <span className="text-green-600 mr-2 mt-0.5">✓</span>
+                          <span className="text-gray-700 text-sm">{line.substring(1).trim()}</span>
+                        </div>
+                      );
+                    }
+                    // Bullets
+                    if (line.startsWith('•')) {
+                      return (
+                        <div key={idx} className="flex items-start ml-4">
+                          <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                          <span className="text-gray-700 text-sm">{line.substring(1).trim()}</span>
+                        </div>
+                      );
+                    }
+                    // Separators
+                    if (line.trim() === '---') {
+                      return <hr key={idx} className="my-4 border-gray-300" />;
+                    }
+                    // Empty lines
+                    if (line.trim() === '') {
+                      return <div key={idx} className="h-2" />;
+                    }
+                    // Regular text
+                    return (
+                      <p key={idx} className="text-gray-700 text-sm">
+                        {line}
+                      </p>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
-            {/* Experience */}
-            <div className="mb-8">
+            {/* Experience - NUR anzeigen wenn NICHT strukturiert */}
+            {currentCV.coverLetterStyle !== 'strukturiert' && (
+              <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-blue-600">
                 Berufserfahrung
               </h2>
@@ -273,6 +314,7 @@ const CVPreview = () => {
                 ))}
               </div>
             </div>
+            )}
           </div>
         </div>
       </div>
