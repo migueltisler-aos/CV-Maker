@@ -257,30 +257,39 @@ Nutze stattdessen:
 
 Jeder Satz muss zählen. Keine Füllwörter.`,
 
-    strukturiert: `Erstelle ein strukturiertes Anschreiben, das jede Anforderung direkt mit dem passenden Projekt verbindet.
+    strukturiert: `Erstelle ein strukturiertes Anschreiben, das jede Anforderung direkt adressiert.
 
-FORMAT:
+FORMAT - Für jede Must-Have-Anforderung:
 
-Für jede Must-Have-Anforderung:
-1. Überschrift: **[Name der Anforderung]**
-2. Fließtext (ca. 5 Sätze): Erkläre authentisch, wie du diese Anforderung durch ein konkretes Projekt erfüllst
-   - Wähle das passendste Projekt für diese Anforderung
-   - Benenne Firma, Rolle, Zeitraum direkt im Text
-   - Nutze konkrete Zahlen, Daten, Fakten aus den Achievements
-   - Schreibe wie ein Mensch - authentisch, nicht zu glatt
-   - Zeige messbare Ergebnisse und Impact
+**[Name der Anforderung]**
 
-Beispiel:
+[3-5 Sätze die erklären warum du diese Anforderung erfüllst]
+- Wähle das passendste Projekt für diese Anforderung
+- Benenne konkret: Firma, Rolle, Zeitraum
+- Nutze Zahlen, Daten, Fakten aus den Achievements
+- Schreibe natürlich und authentisch, wie ein Mensch
+- Zeige messbare Ergebnisse
+
+[Eine persönliche Aussage/Einschätzung von dir zu dieser Anforderung]
+
+---
+
+BEISPIEL:
+
 **KPI-Dashboards und Echtzeit-Reporting**
-Bei Pegel Pumpenanlagen (2020-2022) habe ich als Data Analytics Lead ein KPI-Dashboard entwickelt, das in Echtzeit profitable Geschäftsbereiche identifiziert. Das System ermöglichte der Geschäftsführung erstmals datenbasierte Entscheidungen zur Ressourcenallokation. Durch die Transparenz konnten wir das Wartungsgeschäft gezielt um 45% ausbauen und die Profitabilität um 23% steigern. Die Implementierung dauerte 3 Monate und umfasste die Integration von 5 verschiedenen Datenquellen. Seitdem nutzt das gesamte Management-Team täglich die Dashboards für operative Entscheidungen.
+
+Bei Pegel Pumpenanlagen (2020-2022) habe ich als Data Analytics Lead ein KPI-Dashboard entwickelt, das in Echtzeit profitable Geschäftsbereiche identifiziert. Das System ermöglichte der Geschäftsführung erstmals datenbasierte Entscheidungen zur Ressourcenallokation. Durch die Transparenz konnten wir das Wartungsgeschäft gezielt um 45% ausbauen und die Profitabilität um 23% steigern. Die Implementierung dauerte 3 Monate und umfasste die Integration von 5 verschiedenen Datenquellen.
+
+Dashboards sind für mich der Schlüssel zu guten Entscheidungen - wenn die Daten stimmen, werden komplexe Zusammenhänge auf einen Blick klar.
+
+---
 
 REGELN:
 - KEINE einleitenden Floskeln oder Grußformeln
-- KEINE Abschlussformeln
-- KEINE separate Projektliste am Ende (Projekte sind bereits bei den Anforderungen integriert!)
-- Authentisch schreiben - keine Marketing-Sprache
+- KEINE Abschlussformeln am Ende
+- Natürlich und authentisch schreiben - keine Marketing-Sprache
 - Konkrete Zahlen und Fakten verwenden
-- Ca. 5 Sätze pro Anforderung
+- 3-5 Sätze Begründung + 1 Satz persönliche Aussage
 - Jede Anforderung mit dem passendsten Projekt belegen`
   };
 
