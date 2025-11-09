@@ -224,6 +224,20 @@ const CVPreview = () => {
               </p>
             </div>
 
+            {/* Anforderungs-Matching (nur bei strukturiertem Stil) */}
+            {currentCV.coverLetterStyle === 'strukturiert' && currentCV.coverLetter && (
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-blue-600">
+                  Anforderungs-Matching
+                </h2>
+                <div className="prose max-w-none">
+                  <div className="whitespace-pre-line text-gray-800 text-sm leading-relaxed">
+                    {currentCV.coverLetter}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Experience */}
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-blue-600">

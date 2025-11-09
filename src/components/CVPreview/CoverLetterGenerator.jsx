@@ -28,7 +28,7 @@ const CoverLetterGenerator = () => {
     { id: 'authentisch', label: 'Authentisch', desc: 'Direkt & persönlich, ohne Floskeln' },
     { id: 'professionell', label: 'Professionell', desc: 'Klassisch professionell, modern' },
     { id: 'direkt', label: 'Direkt', desc: 'Kurz & knackig, auf den Punkt' },
-    { id: 'strukturiert', label: 'Strukturiert', desc: 'Anforderungen → Projekte + Werdegang' },
+    { id: 'strukturiert', label: 'CV-Matching', desc: 'Fakten-Check: Anforderungen + Stationen' },
   ];
 
   const handleGenerate = async () => {
@@ -93,40 +93,60 @@ Nutze stattdessen:
 
 Jeder Satz muss zählen. Keine Füllwörter.`,
 
-      strukturiert: `Erstelle ein strukturiertes Anschreiben, das jede Anforderung direkt adressiert.
+      strukturiert: `Erstelle ein CV-Matching-Dokument (KEIN Anschreiben!). Nur Fakten zeigen - passt es?
 
-FORMAT - Für jede Must-Have-Anforderung:
+FORMAT:
 
-**[Name der Anforderung]**
+**ANFORDERUNGS-MATCHING**
 
-[3-5 Sätze die erklären warum du diese Anforderung erfüllst]
-- Wähle das passendste Projekt für diese Anforderung
-- Benenne konkret: Firma, Rolle, Zeitraum
-- Nutze Zahlen, Daten, Fakten aus den Achievements
-- Schreibe natürlich und authentisch, wie ein Mensch
-- Zeige messbare Ergebnisse
+Für jede Must-Have-Anforderung:
 
-[Eine persönliche Aussage/Einschätzung von dir zu dieser Anforderung]
+**[Anforderung]**
+✓ [Passende Projekt-Erfahrung mit Firma, Zeitraum]
+✓ [Konkrete Zahlen/Fakten]
+✓ [Messbare Erfolge]
+
+---
+
+**BISHERIGE STATIONEN**
+
+• [Zeitraum] - [Firma] - [Rolle]
+• [Zeitraum] - [Firma] - [Rolle]
+(neueste zuerst)
 
 ---
 
 BEISPIEL:
 
+**ANFORDERUNGS-MATCHING**
+
 **KPI-Dashboards und Echtzeit-Reporting**
+✓ Pegel Pumpenanlagen (2020-2022) - Data Analytics Lead
+✓ KPI-Dashboard entwickelt für Echtzeit-Identifikation profitabler Bereiche
+✓ 45% Ausbau Wartungsgeschäft, 23% Profitabilitätssteigerung
+✓ 5 Datenquellen integriert, 3 Monate Implementierung
 
-Bei Pegel Pumpenanlagen (2020-2022) habe ich als Data Analytics Lead ein KPI-Dashboard entwickelt, das in Echtzeit profitable Geschäftsbereiche identifiziert. Das System ermöglichte der Geschäftsführung erstmals datenbasierte Entscheidungen zur Ressourcenallokation. Durch die Transparenz konnten wir das Wartungsgeschäft gezielt um 45% ausbauen und die Profitabilität um 23% steigern. Die Implementierung dauerte 3 Monate und umfasste die Integration von 5 verschiedenen Datenquellen.
+**Python & Datenanalyse**
+✓ XYZ Corp (2022-2024) - Senior Data Analyst
+✓ 15 automatisierte Reports mit Python entwickelt
+✓ 30% Zeitersparnis im Reporting-Prozess
+✓ Pandas, NumPy, Matplotlib im täglichen Einsatz
 
-Dashboards sind für mich der Schlüssel zu guten Entscheidungen - wenn die Daten stimmen, werden komplexe Zusammenhänge auf einen Blick klar.
+**BISHERIGE STATIONEN**
+
+• 2022-2024 - XYZ Corp - Senior Data Analyst
+• 2020-2022 - Pegel Pumpenanlagen - Data Analytics Lead
+• 2018-2020 - ABC GmbH - Junior Analyst
 
 ---
 
 REGELN:
-- KEINE einleitenden Floskeln oder Grußformeln
-- KEINE Abschlussformeln am Ende
-- Natürlich und authentisch schreiben - keine Marketing-Sprache
-- Konkrete Zahlen und Fakten verwenden
-- 3-5 Sätze Begründung + 1 Satz persönliche Aussage
-- Jede Anforderung mit dem passendsten Projekt belegen`
+- NUR Fakten, KEINE Anschreiben-Sprache
+- KEINE Motivation, KEINE "warum die Firma"
+- Checkmarks (✓) für übersichtliches Matching
+- Konkrete Zahlen, Daten, Fakten
+- Kurz und prägnant - CV-Stil, nicht Anschreiben
+- Chronologisch bei Stationen (neueste zuerst)`
     };
 
     const style = currentCV.coverLetterStyle || 'authentisch';
