@@ -102,35 +102,35 @@ const CVPreview = () => {
       <div className="bg-white shadow-lg" ref={cvRef}>
         <div className="grid grid-cols-3 gap-0 min-h-screen">
           {/* Left Column (1/3 width) */}
-          <div className="bg-gray-800 text-white p-8">
+          <div className="bg-gradient-to-b from-slate-800 to-slate-900 text-white p-8">
             {/* Personal Info */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold mb-2">{masterCV.personal.name}</h1>
-              <p className="text-lg text-gray-300 mb-4">{masterCV.personal.title}</p>
+              <h1 className="text-3xl font-bold mb-2 text-white">{masterCV.personal.name}</h1>
+              <p className="text-lg text-blue-300 mb-4 font-medium">{masterCV.personal.title}</p>
 
               <div className="space-y-2 text-sm">
                 {masterCV.personal.email && (
                   <div className="flex items-start">
-                    <span className="mr-2">📧</span>
-                    <span className="break-all">{masterCV.personal.email}</span>
+                    <span className="mr-2 text-blue-400">📧</span>
+                    <span className="break-all text-gray-200">{masterCV.personal.email}</span>
                   </div>
                 )}
                 {masterCV.personal.phone && (
                   <div className="flex items-start">
-                    <span className="mr-2">📱</span>
-                    <span>{masterCV.personal.phone}</span>
+                    <span className="mr-2 text-blue-400">📱</span>
+                    <span className="text-gray-200">{masterCV.personal.phone}</span>
                   </div>
                 )}
                 {masterCV.personal.location && (
                   <div className="flex items-start">
-                    <span className="mr-2">📍</span>
-                    <span>{masterCV.personal.location}</span>
+                    <span className="mr-2 text-blue-400">📍</span>
+                    <span className="text-gray-200">{masterCV.personal.location}</span>
                   </div>
                 )}
                 {masterCV.personal.linkedin && (
                   <div className="flex items-start">
-                    <span className="mr-2">💼</span>
-                    <span className="break-all text-xs">{masterCV.personal.linkedin}</span>
+                    <span className="mr-2 text-blue-400">💼</span>
+                    <span className="break-all text-xs text-gray-200">{masterCV.personal.linkedin}</span>
                   </div>
                 )}
               </div>
@@ -227,49 +227,60 @@ const CVPreview = () => {
             {/* Anforderungs-Matching (nur bei strukturiertem Stil) */}
             {currentCV.coverLetterStyle === 'strukturiert' && currentCV.coverLetter && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-blue-600">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 pb-2 border-b-3 border-blue-500">
                   Anforderungs-Matching
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {currentCV.coverLetter.split('\n').map((line, idx) => {
-                    // Bold headings
+                    // Bold headings (Requirements)
                     if (line.startsWith('**') && line.endsWith('**')) {
                       const text = line.replace(/\*\*/g, '');
+                      // Skip "ANFORDERUNGS-MATCHING" and "BISHERIGE STATIONEN" headers
+                      if (text === 'ANFORDERUNGS-MATCHING' || text === 'BISHERIGE STATIONEN') {
+                        return (
+                          <h3 key={idx} className="text-xl font-bold text-slate-800 mt-8 mb-4 pb-2 border-b-2 border-slate-300">
+                            {text}
+                          </h3>
+                        );
+                      }
                       return (
-                        <h3 key={idx} className="text-lg font-bold text-gray-900 mt-6 mb-2">
-                          {text}
-                        </h3>
+                        <div key={idx} className="mt-6 mb-3 bg-gradient-to-r from-blue-50 to-white p-4 rounded-lg border-l-4 border-blue-500">
+                          <h3 className="text-base font-bold text-slate-900 flex items-center">
+                            <span className="text-blue-600 mr-2">📋</span>
+                            {text}
+                          </h3>
+                        </div>
                       );
                     }
                     // Checkmarks
                     if (line.startsWith('✓')) {
                       return (
-                        <div key={idx} className="flex items-start ml-4">
-                          <span className="text-green-600 mr-2 mt-0.5">✓</span>
-                          <span className="text-gray-700 text-sm">{line.substring(1).trim()}</span>
+                        <div key={idx} className="flex items-start ml-8 mb-2">
+                          <span className="text-green-600 mr-3 mt-0.5 font-bold text-base">✓</span>
+                          <span className="text-gray-700 text-sm leading-relaxed">{line.substring(1).trim()}</span>
                         </div>
                       );
                     }
-                    // Bullets
+                    // Bullets (for timeline)
                     if (line.startsWith('•')) {
                       return (
-                        <div key={idx} className="flex items-start ml-4">
-                          <span className="text-blue-600 mr-2 mt-0.5">•</span>
-                          <span className="text-gray-700 text-sm">{line.substring(1).trim()}</span>
+                        <div key={idx} className="flex items-start ml-8 mb-2">
+                          <span className="text-blue-500 mr-3 mt-0.5 font-bold">•</span>
+                          <span className="text-gray-600 text-sm font-medium">{line.substring(1).trim()}</span>
                         </div>
                       );
                     }
                     // Separators
                     if (line.trim() === '---') {
-                      return <hr key={idx} className="my-4 border-gray-300" />;
+                      return <div key={idx} className="my-6" />;
                     }
                     // Empty lines
                     if (line.trim() === '') {
-                      return <div key={idx} className="h-2" />;
+                      return <div key={idx} className="h-1" />;
                     }
                     // Regular text
                     return (
-                      <p key={idx} className="text-gray-700 text-sm">
+                      <p key={idx} className="text-gray-600 text-sm ml-8">
                         {line}
                       </p>
                     );
