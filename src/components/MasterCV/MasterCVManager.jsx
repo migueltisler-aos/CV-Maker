@@ -278,9 +278,24 @@ Antworte NUR mit einem validen JSON-Objekt:
 
           {step === 1 && (
             <>
-              <p className="text-gray-600 mb-6">
-                Füge deine CV-Daten im CSV-Format ein (Format: Bereich, Firma/Projekt, Rolle/Titel, Zeitraum, Ort, Details)
-              </p>
+              <div className="flex justify-between items-start mb-4">
+                <p className="text-gray-600">
+                  Füge deine CV-Daten im CSV-Format ein (Format: Bereich, Firma/Projekt, Rolle/Titel, Zeitraum, Ort, Details)
+                </p>
+                <button
+                  onClick={() => {
+                    const example = `Bereich,Firma/Projekt,Rolle/Titel,Zeitraum,Ort,Details
+Berufserfahrung,Pegel Pumpenanlagen GmbH,Geschäftsleiter,10/2024 – 09/2025,Berlin,"KPI-Dashboard erstellt | Recruiting +25% | Team aufgebaut"
+Berufserfahrung,TechCorp AG,Senior Manager,01/2022 – 09/2024,München,"Digitalisierung Logistik | Kostenreduktion 30% | WMS Implementierung"
+Ausbildung,Technische Universität Berlin,Master Wirtschaftsingenieurwesen,2020,Berlin,
+Weiterbildung,,Scrum Master Zertifikat,2021,,`;
+                    setCsvInput(example);
+                  }}
+                  className="btn-secondary text-sm whitespace-nowrap ml-4"
+                >
+                  📝 Beispiel laden
+                </button>
+              </div>
 
               <textarea
                 value={csvInput}
@@ -291,26 +306,34 @@ Antworte NUR mit einem validen JSON-Objekt:
 Berufserfahrung,Pegel Pumpenanlagen GmbH,Geschäftsleiter,10/2024 – 09/2025,Berlin,"KPI-Dashboard | Recruiting +25%"`}
               />
 
-              <div className="flex space-x-4">
-                {manualMode ? (
-                  <button
-                    onClick={handleGeneratePrompt}
-                    disabled={!csvInput.trim()}
-                    className="btn-primary"
-                  >
-                    📋 Prompt für KI generieren
-                  </button>
-                ) : (
-                  <button onClick={handleCSVImport} className="btn-primary">
-                    CSV Importieren (Lokal)
-                  </button>
+              <div className="flex flex-col space-y-2">
+                {!csvInput.trim() && (
+                  <p className="text-sm text-amber-600">
+                    ⚠️ Bitte füge zuerst CSV-Daten im Textfeld oben ein
+                  </p>
                 )}
-                <button
-                  onClick={() => setShowCSVImport(false)}
-                  className="btn-secondary"
-                >
-                  Manuell eingeben
-                </button>
+                <div className="flex space-x-4">
+                  {manualMode ? (
+                    <button
+                      onClick={handleGeneratePrompt}
+                      disabled={!csvInput.trim()}
+                      className={`btn-primary ${!csvInput.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title={!csvInput.trim() ? 'Bitte füge zuerst CSV-Daten ein' : 'Klicke hier um den KI-Prompt zu generieren'}
+                    >
+                      📋 Prompt für KI generieren
+                    </button>
+                  ) : (
+                    <button onClick={handleCSVImport} className="btn-primary">
+                      CSV Importieren (Lokal)
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setShowCSVImport(false)}
+                    className="btn-secondary"
+                  >
+                    Manuell eingeben
+                  </button>
+                </div>
               </div>
             </>
           )}
