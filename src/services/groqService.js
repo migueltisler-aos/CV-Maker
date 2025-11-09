@@ -257,32 +257,37 @@ Nutze stattdessen:
 
 Jeder Satz muss zählen. Keine Füllwörter.`,
 
-    strukturiert: `KEIN Fließtext! Nur zwei Listen - sonst nichts.
+    strukturiert: `Erstelle ein strukturiertes Anschreiben mit Anforderungs-Matching und Werdegang.
 
 FORMAT:
 
-**ANFORDERUNGEN & NACHWEISE:**
-Für jede Must-Have-Anforderung EINE Zeile:
-• [Anforderung] → [Konkreter Nachweis aus Projekterfahrung]
+**TEIL 1 - ANFORDERUNGEN & QUALIFIKATIONEN:**
+
+Für jede Must-Have-Anforderung:
+1. Überschrift: **Anforderung: [Name der Anforderung]**
+2. Fließtext (ca. 5 Sätze): Erkläre authentisch warum du das kannst
+   - Nutze konkrete Projekte mit Zahlen, Daten, Fakten
+   - Schreibe wie ein Mensch - nicht zu glatt, authentisch
+   - Belege die Qualifikation mit konkreten Erfolgen
+   - Benenne Firma, Zeitraum, messbare Ergebnisse
 
 Beispiel:
-• KPI-Dashboards → Entwicklung Echtzeit-Dashboard bei Pegel Pumpenanlagen GmbH
-• Teamführung → Recruiting & Personalaufbau +25% bei Bilstein GmbH
+**Anforderung: KPI-Dashboards und Echtzeit-Reporting**
+Bei Pegel Pumpenanlagen habe ich ein KPI-Dashboard entwickelt, das in Echtzeit profitable Geschäftsbereiche identifiziert. Das System ermöglichte der Geschäftsführung erstmals datenbasierte Entscheidungen zur Ressourcenallokation. Durch die Transparenz konnten wir das Wartungsgeschäft gezielt um 45% ausbauen und die Profitabilität um 23% steigern. Die Implementierung dauerte 3 Monate und umfasste die Integration von 5 verschiedenen Datenquellen. Seitdem nutzt das gesamte Management-Team täglich die Dashboards für operative Entscheidungen.
 
-**BISHERIGE STATIONEN:**
-Für jede Position EINE Zeile:
+**TEIL 2 - BISHERIGE STATIONEN:**
+
+Liste ohne weitere Erklärung:
+• [Zeitraum] bei [Firma] als [Rolle]
 • [Zeitraum] bei [Firma] als [Rolle]
 
-Beispiel:
-• 10/2024 – 09/2025 bei Pegel Pumpenanlagen GmbH als Geschäftsleiter
-• 10/2022 – 09/2024 bei Bilstein GmbH als Interim-Geschäftsführer
-
 REGELN:
-- KEINE Einleitung, KEIN Abschluss, KEINE Grußformeln
-- KEINE weiteren Erklärungen
-- NUR diese zwei Listen mit Bullet Points
-- Nutze EXAKTE Projekterfahrungen aus den Daten
-- Sei präzise und konkret`
+- KEINE einleitenden Floskeln oder Grußformeln
+- KEINE Abschlussformeln
+- Authentisch schreiben - keine Marketing-Sprache
+- Konkrete Zahlen und Fakten verwenden
+- Ca. 5 Sätze pro Anforderung
+- Chronologisch bei Stationen (neueste zuerst)`
   };
 
   let prompt;
