@@ -25,6 +25,7 @@ const CoverLetterGenerator = () => {
     { id: 'authentisch', label: 'Authentisch', desc: 'Direkt & persönlich, ohne Floskeln' },
     { id: 'professionell', label: 'Professionell', desc: 'Klassisch professionell, modern' },
     { id: 'direkt', label: 'Direkt', desc: 'Kurz & knackig, auf den Punkt' },
+    { id: 'strukturiert', label: 'Strukturiert', desc: 'Anforderungen → Projekte + Werdegang' },
   ];
 
   const handleGenerate = async () => {
@@ -189,7 +190,7 @@ const CoverLetterGenerator = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Stil auswählen
         </label>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {styles.map((style) => (
             <button
               key={style.id}

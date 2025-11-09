@@ -255,10 +255,61 @@ Nutze stattdessen:
 2. Was ich mitbringe (1-2 Highlights aus Projekten)
 3. Nächste Schritte (kurz und direkt)
 
-Jeder Satz muss zählen. Keine Füllwörter.`
+Jeder Satz muss zählen. Keine Füllwörter.`,
+
+    strukturiert: `Schreibe eine strukturierte, punktuelle Darstellung:
+1. Kurze Einleitung (1-2 Sätze): Interesse an der Position
+2. Anforderungs-Matching (Hauptteil):
+   - Für jede Must-Have-Anforderung: Eine Zeile mit konkretem Projekt-Beispiel
+   - Format: "• [Anforderung] → [Projektname] bei [Firma]: [konkreter Erfolg/Erfahrung]"
+3. Beruflicher Werdegang (Aufzählung):
+   - "Bisherige Stationen:"
+   - Liste der Firmen mit Rolle und Zeitraum
+   - Format: "• [Rolle] bei [Firma] ([Zeitraum])"
+4. Kurzer Abschluss (1 Satz): Verfügbarkeit/nächste Schritte
+
+Vermeide Fließtext - nutze Bullet Points und klare Struktur.`
   };
 
-  const prompt = `Schreibe ein Anschreiben für folgende Position im Stil: ${style}
+  let prompt;
+
+  if (style === 'strukturiert') {
+    prompt = `Erstelle ein strukturiertes Anschreiben für folgende Position.
+
+${styleInstructions[style]}
+
+Persönliche Daten:
+Name: ${personal.name}
+Titel: ${personal.title || 'Nicht angegeben'}
+Standort: ${personal.location || 'Nicht angegeben'}
+
+Position:
+Titel: ${requirements.titel}
+Firma: ${requirements.firma || 'Nicht angegeben'}
+
+Must-Have Anforderungen:
+${requirements.mustHave?.join('\n') || 'Keine'}
+
+Verantwortlichkeiten:
+${requirements.responsibilities?.join('\n') || 'Keine'}
+
+Relevante Projekte & Erfolge:
+${selectedExperiences.map((exp, idx) => `
+${idx + 1}. ${exp.rolle} bei ${exp.firma} (${exp.zeitraum})
+Highlights:
+${exp.achievements?.slice(0, 3).map(a => `- ${a}`).join('\n') || '- ' + exp.details}
+`).join('\n')}
+
+WICHTIGE FORMATIERUNG:
+- Nutze Bullet Points (•) für Listen
+- Jede Anforderung bekommt EINE Zeile mit passendem Projekt-Beispiel
+- Halte dich an die strukturierte Form, kein Fließtext
+- Sei konkret und nutze Zahlen wo möglich
+
+Schreibe NUR das Anschreiben, keine Erklärungen oder Meta-Kommentare.
+Beginne NICHT mit Absenderadresse oder Betreff - nur der Text.`;
+  } else {
+    prompt = `Schreibe ein Anschreiben für folgende Position im Stil: ${style}
 
 WICHTIG: ${styleInstructions[style]}
 
@@ -293,6 +344,7 @@ Länge: ${style === 'direkt' ? '150-200 Wörter' : '250-350 Wörter'}
 
 Schreibe NUR das Anschreiben, keine Erklärungen oder Meta-Kommentare.
 Beginne NICHT mit Absenderadresse oder Betreff - nur der Text.`;
+  }
 
   try {
     const response = await fetch(GROQ_API_URL, {

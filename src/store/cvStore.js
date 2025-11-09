@@ -18,7 +18,7 @@ const useCVStore = create((set, get) => ({
     selectedSkills: [],
     customizations: {},
     coverLetter: null,
-    coverLetterStyle: 'authentisch',
+    coverLetterStyle: 'strukturiert',
   },
 
   // Generated CVs
@@ -135,7 +135,7 @@ const useCVStore = create((set, get) => ({
         selectedSkills: [],
         customizations: {},
         coverLetter: null,
-        coverLetterStyle: 'authentisch',
+        coverLetterStyle: 'strukturiert',
       },
       currentJob: null,
       jobRequirements: null,
