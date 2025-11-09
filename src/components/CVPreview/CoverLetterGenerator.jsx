@@ -16,6 +16,9 @@ const CoverLetterGenerator = () => {
 
   const [editMode, setEditMode] = useState(false);
   const [editedText, setEditedText] = useState(currentCV.coverLetter || '');
+  const [copyPasteMode, setCopyPasteMode] = useState(false);
+  const [promptText, setPromptText] = useState('');
+  const [pastedResult, setPastedResult] = useState('');
 
   const selectedExperiences = masterCV?.experience.filter(exp =>
     currentCV.selectedProjects.includes(exp.id)
@@ -55,6 +58,159 @@ const CoverLetterGenerator = () => {
 
   const handleStyleChange = (style) => {
     setCoverLetterStyle(style);
+  };
+
+  const generatePrompt = () => {
+    const styleInstructions = {
+      authentisch: `Schreibe authentisch und direkt. Vermeide:
+- Übertriebene Superlative ("höchst motiviert", "außerordentlich begeistert")
+- Phrasen wie "hiermit bewerbe ich mich"
+- Zu lange Schachtelsätze
+- Standardformulierungen
+
+Nutze stattdessen:
+- Konkrete Beispiele und Zahlen aus den Projekten
+- Direkte, klare Sprache
+- Ich-Perspektive mit Substanz
+- Kurze, prägnante Sätze
+- Zeige Persönlichkeit, aber bleibe professionell`,
+
+      professionell: `Schreibe professionell, aber modern. Vermeide:
+- Zu steife, altbackene Formulierungen
+- Übertriebene Bescheidenheit
+- Leere Phrasen ohne Substanz
+
+Nutze stattdessen:
+- Klare, selbstbewusste Sprache
+- Konkrete Erfolge mit Zahlen
+- Professionelle, aber nicht steife Formulierungen
+- Strukturierte Argumentation`,
+
+      direkt: `Schreibe kurz und knackig. Maximal 3 kurze Absätze:
+1. Warum ich passe (2-3 Sätze mit konkreten Erfolgen)
+2. Was ich mitbringe (1-2 Highlights aus Projekten)
+3. Nächste Schritte (kurz und direkt)
+
+Jeder Satz muss zählen. Keine Füllwörter.`,
+
+      strukturiert: `Erstelle ein strukturiertes Anschreiben, das jede Anforderung direkt adressiert.
+
+FORMAT - Für jede Must-Have-Anforderung:
+
+**[Name der Anforderung]**
+
+[3-5 Sätze die erklären warum du diese Anforderung erfüllst]
+- Wähle das passendste Projekt für diese Anforderung
+- Benenne konkret: Firma, Rolle, Zeitraum
+- Nutze Zahlen, Daten, Fakten aus den Achievements
+- Schreibe natürlich und authentisch, wie ein Mensch
+- Zeige messbare Ergebnisse
+
+[Eine persönliche Aussage/Einschätzung von dir zu dieser Anforderung]
+
+---
+
+BEISPIEL:
+
+**KPI-Dashboards und Echtzeit-Reporting**
+
+Bei Pegel Pumpenanlagen (2020-2022) habe ich als Data Analytics Lead ein KPI-Dashboard entwickelt, das in Echtzeit profitable Geschäftsbereiche identifiziert. Das System ermöglichte der Geschäftsführung erstmals datenbasierte Entscheidungen zur Ressourcenallokation. Durch die Transparenz konnten wir das Wartungsgeschäft gezielt um 45% ausbauen und die Profitabilität um 23% steigern. Die Implementierung dauerte 3 Monate und umfasste die Integration von 5 verschiedenen Datenquellen.
+
+Dashboards sind für mich der Schlüssel zu guten Entscheidungen - wenn die Daten stimmen, werden komplexe Zusammenhänge auf einen Blick klar.
+
+---
+
+REGELN:
+- KEINE einleitenden Floskeln oder Grußformeln
+- KEINE Abschlussformeln am Ende
+- Natürlich und authentisch schreiben - keine Marketing-Sprache
+- Konkrete Zahlen und Fakten verwenden
+- 3-5 Sätze Begründung + 1 Satz persönliche Aussage
+- Jede Anforderung mit dem passendsten Projekt belegen`
+    };
+
+    const style = currentCV.coverLetterStyle || 'authentisch';
+
+    if (style === 'strukturiert') {
+      return `${styleInstructions[style]}
+
+POSITION:
+${jobRequirements.titel} bei ${jobRequirements.firma || 'dem Unternehmen'}
+
+MUST-HAVE ANFORDERUNGEN:
+${jobRequirements.mustHave?.join('\n') || 'Keine spezifischen Anforderungen angegeben'}
+
+VERANTWORTLICHKEITEN:
+${jobRequirements.responsibilities?.join('\n') || 'Keine'}
+
+VERFÜGBARE PROJEKTERFAHRUNGEN:
+${selectedExperiences.map((exp, idx) => `
+${idx + 1}. ${exp.rolle} bei ${exp.firma} (${exp.zeitraum})
+Achievements:
+${exp.achievements?.map(a => `- ${a}`).join('\n') || '- ' + exp.details}
+`).join('\n')}
+
+AUFGABE:
+Erstelle für jede Must-Have-Anforderung einen Abschnitt wie im FORMAT beschrieben.
+Wähle für jede Anforderung das passendste Projekt aus und integriere es direkt im Fließtext.
+NICHTS ANDERES - keine Einleitung, kein Abschluss, keine separate Projektliste!`;
+    } else {
+      return `Schreibe ein Anschreiben für folgende Position im Stil: ${style}
+
+WICHTIG: ${styleInstructions[style]}
+
+Persönliche Daten:
+Name: ${masterCV.personal.name}
+Titel: ${masterCV.personal.title || 'Nicht angegeben'}
+Standort: ${masterCV.personal.location || 'Nicht angegeben'}
+
+Position:
+Titel: ${jobRequirements.titel}
+Firma: ${jobRequirements.firma || 'Nicht angegeben'}
+
+Must-Have Anforderungen:
+${jobRequirements.mustHave?.join('\n') || 'Keine'}
+
+Verantwortlichkeiten:
+${jobRequirements.responsibilities?.join('\n') || 'Keine'}
+
+Relevante Projekte & Erfolge:
+${selectedExperiences.map((exp, idx) => `
+${idx + 1}. ${exp.rolle} bei ${exp.firma} (${exp.zeitraum})
+Highlights:
+${exp.achievements?.slice(0, 3).map(a => `- ${a}`).join('\n') || '- ' + exp.details}
+`).join('\n')}
+
+STRUKTUR:
+1. Einleitung: Direkt zum Punkt, warum diese Position (ohne "hiermit bewerbe ich mich")
+2. Hauptteil: 2-3 konkrete Erfolge aus den Projekten, die zu den Anforderungen passen
+3. Abschluss: Kurz, was ich mitbringe und nächste Schritte
+
+Länge: ${style === 'direkt' ? '150-200 Wörter' : '250-350 Wörter'}
+
+Schreibe NUR das Anschreiben, keine Erklärungen oder Meta-Kommentare.
+Beginne NICHT mit Absenderadresse oder Betreff - nur der Text.`;
+    }
+  };
+
+  const handleShowPrompt = () => {
+    const prompt = generatePrompt();
+    setPromptText(prompt);
+    setCopyPasteMode(true);
+  };
+
+  const handleCopyPrompt = () => {
+    navigator.clipboard.writeText(promptText);
+    alert('Prompt in Zwischenablage kopiert! Füge ihn in ChatGPT/Claude ein.');
+  };
+
+  const handleSaveFromPaste = () => {
+    if (pastedResult.trim()) {
+      setCoverLetter(pastedResult);
+      setEditedText(pastedResult);
+      setCopyPasteMode(false);
+      setPastedResult('');
+    }
   };
 
   const handleExportPDF = () => {
@@ -208,26 +364,93 @@ const CoverLetterGenerator = () => {
         </div>
       </div>
 
-      {/* Generate Button */}
-      <button
-        onClick={handleGenerate}
-        disabled={isLoading}
-        className="btn-primary w-full mb-4"
-      >
-        {isLoading ? (
-          <span className="flex items-center justify-center">
-            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Generiere Anschreiben...
-          </span>
-        ) : currentCV.coverLetter ? (
-          '🔄 Neu generieren'
-        ) : (
-          '✨ Anschreiben generieren'
-        )}
-      </button>
+      {/* Generate Buttons */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <button
+          onClick={handleGenerate}
+          disabled={isLoading}
+          className="btn-primary"
+        >
+          {isLoading ? (
+            <span className="flex items-center justify-center">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Generiere...
+            </span>
+          ) : currentCV.coverLetter ? (
+            '🔄 Neu generieren (API)'
+          ) : (
+            '✨ Mit API generieren'
+          )}
+        </button>
+        <button
+          onClick={handleShowPrompt}
+          className="btn-secondary"
+        >
+          📋 Prompt für ChatGPT/Claude
+        </button>
+      </div>
+
+      {/* Copy-Paste Mode */}
+      {copyPasteMode && (
+        <div className="mb-4 border border-blue-300 rounded-lg p-4 bg-blue-50">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="font-semibold text-blue-900">Copy-Paste Modus</h3>
+            <button
+              onClick={() => setCopyPasteMode(false)}
+              className="text-blue-600 hover:text-blue-800 text-sm"
+            >
+              ✕ Schließen
+            </button>
+          </div>
+
+          <div className="mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium text-blue-900">
+                1. Prompt kopieren:
+              </label>
+              <button
+                onClick={handleCopyPrompt}
+                className="btn-primary text-sm"
+              >
+                📋 In Zwischenablage kopieren
+              </button>
+            </div>
+            <textarea
+              value={promptText}
+              readOnly
+              className="w-full h-64 p-3 border border-blue-200 rounded-lg bg-white text-sm font-mono"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-blue-900 mb-2">
+              2. Ergebnis hier einfügen:
+            </label>
+            <textarea
+              value={pastedResult}
+              onChange={(e) => setPastedResult(e.target.value)}
+              placeholder="Füge hier das generierte Anschreiben von ChatGPT/Claude ein..."
+              className="w-full h-64 p-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <button
+            onClick={handleSaveFromPaste}
+            disabled={!pastedResult.trim()}
+            className="btn-primary w-full"
+          >
+            💾 Anschreiben übernehmen
+          </button>
+
+          <p className="text-xs text-blue-700 mt-3">
+            💡 Kopiere den Prompt oben und füge ihn in ChatGPT oder Claude ein.
+            Kopiere dann das Ergebnis zurück in das untere Textfeld.
+          </p>
+        </div>
+      )}
 
       {/* Cover Letter Preview/Edit */}
       {currentCV.coverLetter && (
