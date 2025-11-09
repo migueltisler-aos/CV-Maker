@@ -74,20 +74,26 @@ const MasterCVManager = () => {
   };
 
   const generateAIPrompt = () => {
-    const prompt = `Analysiere folgende CV-Daten im CSV-Format und strukturiere sie.
+    const prompt = `Extrahiere und strukturiere CV-Daten aus folgendem Text (egal ob PDF, Word, CSV oder Freitext).
 
-CSV-Daten:
+CV-DATEN:
 ${csvInput}
 
-WICHTIGE REGELN:
-1. Parse die CSV-Daten (Format: Bereich, Firma/Projekt, Rolle/Titel, Zeitraum, Ort, Details)
-2. BEHALTE ALLE Details/Achievements 1:1 bei - NICHT kürzen, zusammenfassen oder umformulieren!
-3. Details mit "|" Trennung sind separate Achievements → als Array aufteilen
-4. Extrahiere Skills aus ALLEN Details (technische und soft skills)
-5. Bewerte jede Skill auf einer Skala von 1-10 basierend auf Häufigkeit und Kontext
-6. Kategorisiere Skills: Technical (WMS, ERP, SQL, Python, etc.), Soft (Führung, Projektmanagement, etc.), Tools (Excel, CRM, etc.)
+AUFGABE:
+Finde und extrahiere ALLE Informationen zu:
+1. Berufserfahrung (Firma, Rolle, Zeitraum, Ort, Achievements/Tätigkeiten)
+2. Ausbildung (Institution, Abschluss, Jahr)
+3. Weiterbildungen/Zertifikate (Name, Jahr)
+4. Skills (technische und soft skills)
 
-Antworte NUR mit einem validen JSON-Objekt:
+WICHTIGE REGELN:
+- Erkenne das Format automatisch (CSV, Fließtext, tabellarisch, etc.)
+- BEHALTE ALLE Details/Achievements 1:1 bei - NICHT kürzen!
+- Trenne multiple Achievements mit "|" oder finde Bullet Points
+- Bewerte Skills auf Skala 1-10 basierend auf Häufigkeit/Kontext
+- Kategorisiere Skills: Technical (WMS, ERP, SQL, Python), Soft (Führung, Projektmanagement), Tools (Excel, CRM)
+
+Antworte NUR mit validem JSON:
 {
   "experience": [
     {
@@ -96,8 +102,8 @@ Antworte NUR mit einem validen JSON-Objekt:
       "rolle": "Position",
       "zeitraum": "MM/YYYY - MM/YYYY",
       "ort": "Stadt",
-      "details": "Vollständiger Originaltext aus CSV",
-      "achievements": ["EXAKTES Achievement 1 aus CSV", "EXAKTES Achievement 2 aus CSV", "..."]
+      "details": "Vollständiger Originaltext",
+      "achievements": ["EXAKTES Achievement 1", "EXAKTES Achievement 2", "..."]
     }
   ],
   "education": [
@@ -124,9 +130,10 @@ Antworte NUR mit einem validen JSON-Objekt:
   ]
 }
 
-BEISPIEL:
-CSV: "KPI-Dashboard | Recruiting +25% | Team aufgebaut"
-JSON: "achievements": ["KPI-Dashboard", "Recruiting +25%", "Team aufgebaut"]`;
+BEISPIELE FÜR FORMATE DIE DU ERKENNEN SOLLST:
+- CSV: "Berufserfahrung,Firma,Rolle,Zeitraum,Ort,Details"
+- PDF/Word Kopie: "10/2024 – 09/2025 Geschäftsleiter bei Pegel Pumpenanlagen GmbH, Berlin..."
+- Freitext: "Ich war von 2024 bis 2025 als Geschäftsleiter bei Pegel tätig..."`;
     return prompt;
   };
 
@@ -371,9 +378,14 @@ JSON: "achievements": ["KPI-Dashboard", "Recruiting +25%", "Team aufgebaut"]`;
           {step === 1 && (
             <>
               <div className="flex justify-between items-start mb-4">
-                <p className="text-gray-600">
-                  Füge deine CV-Daten im CSV-Format ein (Format: Bereich, Firma/Projekt, Rolle/Titel, Zeitraum, Ort, Details)
-                </p>
+                <div>
+                  <p className="text-gray-600">
+                    Füge deinen CV-Text ein - egal aus welchem Format:
+                  </p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    CSV, PDF-Kopie, Word-Text, oder einfach Freitext - die KI erkennt das Format automatisch
+                  </p>
+                </div>
                 <button
                   onClick={() => {
                     const example = `Bereich,Firma/Projekt,Rolle/Titel,Zeitraum,Ort,Details
@@ -394,14 +406,21 @@ Weiterbildung,,Scrum Master Zertifikat,2021,,`;
                 onChange={(e) => setCsvInput(e.target.value)}
                 className="input-field font-mono text-sm mb-4"
                 rows={15}
-                placeholder={`Bereich,Firma/Projekt,Rolle/Titel,Zeitraum,Ort,Details
-Berufserfahrung,Pegel Pumpenanlagen GmbH,Geschäftsleiter,10/2024 – 09/2025,Berlin,"KPI-Dashboard | Recruiting +25%"`}
+                placeholder={`Kopiere hier deinen CV-Text ein - z.B.:
+
+10/2024 – 09/2025
+Geschäftsleiter bei Pegel Pumpenanlagen GmbH, Berlin
+- KPI-Dashboard entwickelt
+- Recruiting +25%
+- Team aufgebaut
+
+Oder als CSV, PDF-Text, Word-Kopie, etc.`}
               />
 
               <div className="flex flex-col space-y-2">
                 {!csvInput.trim() && (
                   <p className="text-sm text-amber-600">
-                    ⚠️ Bitte füge zuerst CSV-Daten im Textfeld oben ein
+                    ⚠️ Bitte füge zuerst deinen CV-Text im Textfeld oben ein
                   </p>
                 )}
                 <div className="flex space-x-4">
@@ -410,7 +429,7 @@ Berufserfahrung,Pegel Pumpenanlagen GmbH,Geschäftsleiter,10/2024 – 09/2025,Be
                       onClick={handleGeneratePrompt}
                       disabled={!csvInput.trim()}
                       className={`btn-primary ${!csvInput.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      title={!csvInput.trim() ? 'Bitte füge zuerst CSV-Daten ein' : 'Klicke hier um den KI-Prompt zu generieren'}
+                      title={!csvInput.trim() ? 'Bitte füge zuerst CV-Text ein' : 'Generiere KI-Prompt für beliebiges CV-Format'}
                     >
                       📋 Prompt für KI generieren
                     </button>
