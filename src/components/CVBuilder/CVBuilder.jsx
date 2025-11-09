@@ -27,6 +27,10 @@ const CVBuilder = () => {
     setLoading(true);
     try {
       const allSkills = masterCV.skills || [];
+
+      // Extrahiere Must-Have Technical Skills aus Job Requirements
+      const mustHaveSkills = jobRequirements?.technicalSkills || [];
+
       const suggestedNames = await suggestTopSkills(jobRequirements, allSkills);
 
       // Match suggested names with master CV skills
@@ -37,22 +41,52 @@ const CVBuilder = () => {
         )
       );
 
-      // Add any suggested skills not in master CV
-      const newSkills = suggestedNames
-        .filter(name => !matched.some(s => s.name.toLowerCase() === name.toLowerCase()))
+      // Match Must-Have Skills with master CV skills
+      const mustHaveMatched = allSkills.filter(skill =>
+        mustHaveSkills.some(name =>
+          skill.name.toLowerCase().includes(name.toLowerCase()) ||
+          name.toLowerCase().includes(skill.name.toLowerCase())
+        )
+      );
+
+      // Add Must-Have Skills that are NOT in master CV
+      const newMustHaveSkills = mustHaveSkills
+        .filter(name =>
+          !matched.some(s => s.name.toLowerCase().includes(name.toLowerCase())) &&
+          !mustHaveMatched.some(s => s.name.toLowerCase().includes(name.toLowerCase()))
+        )
         .map(name => ({
           name,
           level: 7,
           category: 'Technical'
         }));
 
-      const combined = [...matched, ...newSkills].slice(0, 10);
+      // Add any other suggested skills not in master CV
+      const newSkills = suggestedNames
+        .filter(name =>
+          !matched.some(s => s.name.toLowerCase() === name.toLowerCase()) &&
+          !mustHaveMatched.some(s => s.name.toLowerCase().includes(name.toLowerCase())) &&
+          !newMustHaveSkills.some(s => s.name.toLowerCase() === name.toLowerCase())
+        )
+        .map(name => ({
+          name,
+          level: 7,
+          category: 'Technical'
+        }));
+
+      // Priorität: Must-Have Skills zuerst, dann matched, dann neue
+      const combined = [...mustHaveMatched, ...newMustHaveSkills, ...matched, ...newSkills].slice(0, 10);
       setSkills(combined);
       setAiSuggested(true);
     } catch (error) {
       console.error('Error suggesting skills:', error);
-      // Fallback: use skills from master CV
-      const fallback = (masterCV.skills || []).slice(0, 8);
+      // Fallback: use Must-Have technical skills + master CV skills
+      const mustHaveSkills = (jobRequirements?.technicalSkills || []).map(name => ({
+        name,
+        level: 7,
+        category: 'Technical'
+      }));
+      const fallback = [...mustHaveSkills, ...(masterCV.skills || [])].slice(0, 10);
       setSkills(fallback);
     } finally {
       setLoading(false);
