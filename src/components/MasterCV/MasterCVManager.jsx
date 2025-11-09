@@ -78,11 +78,13 @@ const MasterCVManager = () => {
 CSV-Daten:
 ${csvInput}
 
-Aufgabe:
+WICHTIGE REGELN:
 1. Parse die CSV-Daten (Format: Bereich, Firma/Projekt, Rolle/Titel, Zeitraum, Ort, Details)
-2. Extrahiere Skills aus den Details (technische und soft skills)
-3. Bewerte jede Skill auf einer Skala von 1-10 basierend auf der Häufigkeit und dem Kontext
-4. Kategorisiere Skills (Technical, Soft, Tools, etc.)
+2. BEHALTE ALLE Details/Achievements 1:1 bei - NICHT kürzen, zusammenfassen oder umformulieren!
+3. Details mit "|" Trennung sind separate Achievements → als Array aufteilen
+4. Extrahiere Skills aus ALLEN Details (technische und soft skills)
+5. Bewerte jede Skill auf einer Skala von 1-10 basierend auf Häufigkeit und Kontext
+6. Kategorisiere Skills: Technical (WMS, ERP, SQL, Python, etc.), Soft (Führung, Projektmanagement, etc.), Tools (Excel, CRM, etc.)
 
 Antworte NUR mit einem validen JSON-Objekt:
 {
@@ -93,8 +95,8 @@ Antworte NUR mit einem validen JSON-Objekt:
       "rolle": "Position",
       "zeitraum": "MM/YYYY - MM/YYYY",
       "ort": "Stadt",
-      "details": "Beschreibung",
-      "achievements": ["Achievement 1", "Achievement 2"]
+      "details": "Vollständiger Originaltext aus CSV",
+      "achievements": ["EXAKTES Achievement 1 aus CSV", "EXAKTES Achievement 2 aus CSV", "..."]
     }
   ],
   "education": [
@@ -119,7 +121,11 @@ Antworte NUR mit einem validen JSON-Objekt:
       "category": "Technical"
     }
   ]
-}`;
+}
+
+BEISPIEL:
+CSV: "KPI-Dashboard | Recruiting +25% | Team aufgebaut"
+JSON: "achievements": ["KPI-Dashboard", "Recruiting +25%", "Team aufgebaut"]`;
     return prompt;
   };
 
