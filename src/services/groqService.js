@@ -257,37 +257,31 @@ Nutze stattdessen:
 
 Jeder Satz muss zählen. Keine Füllwörter.`,
 
-    strukturiert: `Erstelle ein strukturiertes Anschreiben mit Anforderungs-Matching und Werdegang.
+    strukturiert: `Erstelle ein strukturiertes Anschreiben, das jede Anforderung direkt mit dem passenden Projekt verbindet.
 
 FORMAT:
 
-**TEIL 1 - ANFORDERUNGEN & QUALIFIKATIONEN:**
-
 Für jede Must-Have-Anforderung:
-1. Überschrift: **Anforderung: [Name der Anforderung]**
-2. Fließtext (ca. 5 Sätze): Erkläre authentisch warum du das kannst
-   - Nutze konkrete Projekte mit Zahlen, Daten, Fakten
-   - Schreibe wie ein Mensch - nicht zu glatt, authentisch
-   - Belege die Qualifikation mit konkreten Erfolgen
-   - Benenne Firma, Zeitraum, messbare Ergebnisse
+1. Überschrift: **[Name der Anforderung]**
+2. Fließtext (ca. 5 Sätze): Erkläre authentisch, wie du diese Anforderung durch ein konkretes Projekt erfüllst
+   - Wähle das passendste Projekt für diese Anforderung
+   - Benenne Firma, Rolle, Zeitraum direkt im Text
+   - Nutze konkrete Zahlen, Daten, Fakten aus den Achievements
+   - Schreibe wie ein Mensch - authentisch, nicht zu glatt
+   - Zeige messbare Ergebnisse und Impact
 
 Beispiel:
-**Anforderung: KPI-Dashboards und Echtzeit-Reporting**
-Bei Pegel Pumpenanlagen habe ich ein KPI-Dashboard entwickelt, das in Echtzeit profitable Geschäftsbereiche identifiziert. Das System ermöglichte der Geschäftsführung erstmals datenbasierte Entscheidungen zur Ressourcenallokation. Durch die Transparenz konnten wir das Wartungsgeschäft gezielt um 45% ausbauen und die Profitabilität um 23% steigern. Die Implementierung dauerte 3 Monate und umfasste die Integration von 5 verschiedenen Datenquellen. Seitdem nutzt das gesamte Management-Team täglich die Dashboards für operative Entscheidungen.
-
-**TEIL 2 - BISHERIGE STATIONEN:**
-
-Liste ohne weitere Erklärung:
-• [Zeitraum] bei [Firma] als [Rolle]
-• [Zeitraum] bei [Firma] als [Rolle]
+**KPI-Dashboards und Echtzeit-Reporting**
+Bei Pegel Pumpenanlagen (2020-2022) habe ich als Data Analytics Lead ein KPI-Dashboard entwickelt, das in Echtzeit profitable Geschäftsbereiche identifiziert. Das System ermöglichte der Geschäftsführung erstmals datenbasierte Entscheidungen zur Ressourcenallokation. Durch die Transparenz konnten wir das Wartungsgeschäft gezielt um 45% ausbauen und die Profitabilität um 23% steigern. Die Implementierung dauerte 3 Monate und umfasste die Integration von 5 verschiedenen Datenquellen. Seitdem nutzt das gesamte Management-Team täglich die Dashboards für operative Entscheidungen.
 
 REGELN:
 - KEINE einleitenden Floskeln oder Grußformeln
 - KEINE Abschlussformeln
+- KEINE separate Projektliste am Ende (Projekte sind bereits bei den Anforderungen integriert!)
 - Authentisch schreiben - keine Marketing-Sprache
 - Konkrete Zahlen und Fakten verwenden
 - Ca. 5 Sätze pro Anforderung
-- Chronologisch bei Stationen (neueste zuerst)`
+- Jede Anforderung mit dem passendsten Projekt belegen`
   };
 
   let prompt;
@@ -311,11 +305,10 @@ Achievements:
 ${exp.achievements?.map(a => `- ${a}`).join('\n') || '- ' + exp.details}
 `).join('\n')}
 
-ALLE BISHERIGEN STATIONEN (für zweite Liste):
-${selectedExperiences.map(exp => `${exp.zeitraum} bei ${exp.firma} als ${exp.rolle}`).join('\n')}
-
 AUFGABE:
-Erstelle die zwei Listen wie im FORMAT beschrieben. NICHTS ANDERES.`;
+Erstelle für jede Must-Have-Anforderung einen Abschnitt wie im FORMAT beschrieben.
+Wähle für jede Anforderung das passendste Projekt aus und integriere es direkt im Fließtext.
+NICHTS ANDERES - keine Einleitung, kein Abschluss, keine separate Projektliste!`;
   } else {
     prompt = `Schreibe ein Anschreiben für folgende Position im Stil: ${style}
 
