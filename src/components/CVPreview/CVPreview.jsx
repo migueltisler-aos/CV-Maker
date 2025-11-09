@@ -227,64 +227,117 @@ const CVPreview = () => {
             {/* Anforderungs-Matching (nur bei strukturiertem Stil) */}
             {currentCV.coverLetterStyle === 'strukturiert' && currentCV.coverLetter && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-slate-800 mb-6 pb-2 border-b-3 border-blue-500">
+                <h2 className="text-2xl font-bold text-slate-800 mb-6 pb-2 border-b-4 border-blue-500">
                   Anforderungs-Matching
                 </h2>
-                <div className="space-y-6">
-                  {currentCV.coverLetter.split('\n').map((line, idx) => {
-                    // Bold headings (Requirements)
-                    if (line.startsWith('**') && line.endsWith('**')) {
-                      const text = line.replace(/\*\*/g, '');
-                      // Skip "ANFORDERUNGS-MATCHING" and "BISHERIGE STATIONEN" headers
-                      if (text === 'ANFORDERUNGS-MATCHING' || text === 'BISHERIGE STATIONEN') {
-                        return (
-                          <h3 key={idx} className="text-xl font-bold text-slate-800 mt-8 mb-4 pb-2 border-b-2 border-slate-300">
-                            {text}
-                          </h3>
-                        );
+                <div className="space-y-8">
+                  {(() => {
+                    const lines = currentCV.coverLetter.split('\n');
+                    const elements = [];
+                    let currentRequirement = null;
+                    let currentFirma = null;
+                    let isStationenSection = false;
+
+                    lines.forEach((line, idx) => {
+                      // Skip "ANFORDERUNGS-MATCHING" header
+                      if (line.trim() === '**ANFORDERUNGS-MATCHING**') {
+                        return;
                       }
-                      return (
-                        <div key={idx} className="mt-6 mb-3 bg-gradient-to-r from-blue-50 to-white p-4 rounded-lg border-l-4 border-blue-500">
-                          <h3 className="text-base font-bold text-slate-900 flex items-center">
-                            <span className="text-blue-600 mr-2">📋</span>
-                            {text}
-                          </h3>
-                        </div>
-                      );
-                    }
-                    // Checkmarks
-                    if (line.startsWith('✓')) {
-                      return (
-                        <div key={idx} className="flex items-start ml-8 mb-2">
-                          <span className="text-green-600 mr-3 mt-0.5 font-bold text-base">✓</span>
-                          <span className="text-gray-700 text-sm leading-relaxed">{line.substring(1).trim()}</span>
-                        </div>
-                      );
-                    }
-                    // Bullets (for timeline)
-                    if (line.startsWith('•')) {
-                      return (
-                        <div key={idx} className="flex items-start ml-8 mb-2">
-                          <span className="text-blue-500 mr-3 mt-0.5 font-bold">•</span>
-                          <span className="text-gray-600 text-sm font-medium">{line.substring(1).trim()}</span>
-                        </div>
-                      );
-                    }
-                    // Separators
-                    if (line.trim() === '---') {
-                      return <div key={idx} className="my-6" />;
-                    }
-                    // Empty lines
-                    if (line.trim() === '') {
-                      return <div key={idx} className="h-1" />;
-                    }
-                    // Regular text
-                    return (
-                      <p key={idx} className="text-gray-600 text-sm ml-8">
-                        {line}
-                      </p>
-                    );
-                  })}
+
+                      // BISHERIGE STATIONEN Section
+                      if (line.trim() === '**BISHERIGE STATIONEN**') {
+                        isStationenSection = true;
+                        elements.push(
+                          <div key={idx} className="mt-12 mb-6">
+                            <h3 className="text-xl font-bold text-slate-800 mb-6 pb-2 border-b-2 border-slate-300">
+                              Bisherige Stationen
+                            </h3>
+                            <div className="relative pl-8 border-l-2 border-blue-400">
+                        );
+                        return;
+                      }
+
+                      // Station bullets (Timeline)
+                      if (isStationenSection && line.startsWith('•')) {
+                        const text = line.substring(1).trim();
+                        elements.push(
+                          <div key={idx} className="relative mb-4 pl-6">
+                            <div className="absolute left-[-2.5rem] top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-white"></div>
+                            <span className="text-gray-700 text-sm font-medium">{text}</span>
+                          </div>
+                        );
+                        return;
+                      }
+
+                      // End of stations section
+                      if (isStationenSection && line.trim() === '---') {
+                        elements.push(
+                          </div>
+                          </div>
+                        );
+                        isStationenSection = false;
+                        return;
+                      }
+
+                      // Requirement heading
+                      if (line.startsWith('**') && line.endsWith('**') && !isStationenSection) {
+                        const text = line.replace(/\*\*/g, '');
+                        currentRequirement = text;
+                        currentFirma = null;
+                        elements.push(
+                          <div key={idx} className="mt-8 mb-4 bg-gradient-to-r from-blue-50 via-blue-50 to-white p-5 rounded-xl border-l-4 border-blue-500 shadow-sm">
+                            <h3 className="text-base font-bold text-slate-900">
+                              {text}
+                            </h3>
+                          </div>
+                        );
+                        return;
+                      }
+
+                      // Checkmarks under requirements
+                      if (line.startsWith('✓') && currentRequirement) {
+                        const text = line.substring(1).trim();
+
+                        // Check if this is a new Firma (contains year range and dash)
+                        const isFirma = /\(\d{2}\/\d{4}.*?\).*?-/.test(text);
+
+                        if (isFirma) {
+                          // This is a new company/project
+                          currentFirma = text;
+                          // Extract and bold the numbers
+                          const highlightedText = text.replace(/(\+?\-?\d+[%€]?)/g, '<strong class="text-slate-900">$1</strong>');
+                          elements.push(
+                            <div key={idx} className="flex items-start ml-6 mb-3 mt-4">
+                              <span className="text-green-600 mr-3 mt-0.5 font-bold text-lg">✓</span>
+                              <span className="text-slate-800 text-sm leading-relaxed font-semibold" dangerouslySetInnerHTML={{ __html: highlightedText }}></span>
+                            </div>
+                          );
+                        } else {
+                          // This is a sub-point under the current firma
+                          const highlightedText = text.replace(/(\+?\-?\d+[%€]?)/g, '<strong class="text-slate-900">$1</strong>');
+                          elements.push(
+                            <div key={idx} className="flex items-start ml-12 mb-2">
+                              <span className="text-blue-500 mr-3 mt-0.5">→</span>
+                              <span className="text-gray-700 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: highlightedText }}></span>
+                            </div>
+                          );
+                        }
+                        return;
+                      }
+
+                      // Separators
+                      if (line.trim() === '---') {
+                        return;
+                      }
+
+                      // Empty lines
+                      if (line.trim() === '') {
+                        return;
+                      }
+                    });
+
+                    return elements;
+                  })()}
                 </div>
               </div>
             )}
